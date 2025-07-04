@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ruleta de Recompensas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background: #f0f0f0;
+    }
+    #wheel {
+      margin: auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 10px solid #444;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px #aaa;
+    }
+    .segment {
+      width: 50%;
+      height: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      background-color: #f8c291;
+      border: 1px solid #fff;
+      text-align: right;
+      padding: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    #spin {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    #arrow {
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid red;
+      margin: auto;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Gira la Ruleta 🎉</h1>
+  <div id="arrow"></div>
+  <div id="wheel"></div>
+  <button id="spin">Girar</button>
+  <div id="result"></div>
+
+  <script>
+    const rewards = [
+      "¡10 puntos extra!",
+      "🎁 Un regalo sorpresa",
+      "⏰ 5 minutos de descanso",
+      "😎 Un meme exclusivo",
+      "🍫 Una barra de chocolate",
+      "📚 Escoge un tema para saltarte",
+      "👏 Felicitaciones públicas",
+      "🙌 Un pase libre"
+    ];
+
+    const wheel = document.getElementById("wheel");
+
+    // Crear segmentos
+    const numSegments = rewards.length;
+    for (let i = 0; i < numSegments; i++) {
+      const segment = document.createElement("div");
+      segment.className = "segment";
+      const angle = i * (360 / numSegments);
+      segment.style.transform = `rotate(${angle}deg) skewY(-${90 - (360 / numSegments)}deg)`;
+      segment.innerHTML = rewards[i];
+      wheel.appendChild(segment);
+    }
+
+    document.getElementById("spin").addEventListener("click", () => {
+      const anglePerSegment = 360 / numSegments;
+      const randomIndex = Math.floor(Math.random() * numSegments);
+      const stopAngle = (360 * 5) + (randomIndex * anglePerSegment) + anglePerSegment / 2;
+
+      wheel.style.transition = "transform 4s ease-out";
+      wheel.style.transform = `rotate(-${stopAngle}deg)`;
+
+      // Mostrar resultado después del giro
+      setTimeout(() => {
+        document.getElementById("result").textContent = "Resultado: " + rewards[randomIndex];
+      }, 4000);
+    });
+  </script>
+
+</body>
+</html>
